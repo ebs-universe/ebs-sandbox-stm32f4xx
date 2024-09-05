@@ -24,6 +24,13 @@
  extern "C" {
 #endif
 
+// These are inlineable handlers defined by application code. We 
+// include them here for later inlining into the actual IRQ Handlers. 
+#include <time/systick_handler.h>
+#include <hal_platform/entropy_handlers.h>
+#include <hal_platform/usb_handlers.h>
+#include <hal_platform/shared_handlers.h>
+
 /**
  * @name Core IRQ Handlers
  */
@@ -80,13 +87,6 @@ void TIM3_IRQHandler(void);
 /**@{*/    
 void Error_Handler(void);
 /**@}*/ 
-
-// These are inlineable handlers defined by application code. We 
-// include them here for later inlining into the actual IRQ Handlers. 
-#include <time/systick_handler.h>
-#include <hal_platform/entropy_handlers.h>
-#include <hal_platform/usb_handlers.h>
-#include <hal_platform/shared_handlers.h>
 
 #ifdef __cplusplus
 }
