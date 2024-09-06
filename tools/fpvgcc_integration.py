@@ -49,11 +49,10 @@ def fpv_usections(source, target, env):
 
 
 # Register the tasks
-env.AddCustomTarget("fpv_sar", "buildprog", fpv_sar, title="FPV per Archive", description="Run fpv-gcc with --sar")
-env.AddCustomTarget("fpv_sobj", "buildprog", fpv_sobj, title="FPV per Object File", description="Run fpv-gcc with --sobj all")
-env.AddCustomTarget("fpv_ssym", "buildprog", fpv_ssym, title="FPV per Symbol", description="Run fpv-gcc with --sobj all")
-env.AddCustomTarget("fpv_ssec", "buildprog", fpv_ssec, title="FPV per Object File, per Section", description="Run fpv-gcc with --ssec")
-
-env.AddCustomTarget("fpv_uf", "buildprog", fpv_uf, title="FPV Used Files", description="Run fpv-gcc with --uf")
-env.AddCustomTarget("fpv_uregions", "buildprog", fpv_uregions, title="FPV Used Regions", description="Run fpv-gcc with --uregions")
-env.AddCustomTarget("fpv_usections", "buildprog", fpv_usections, title="FPV Used Sections", description="Run fpv-gcc with --usections")
+env.AddCustomTarget("fpv_sar", "buildprog", fpv_sar, title="Memory Footprint per Archive", description="Run fpv-gcc with --sar")
+env.AddCustomTarget("fpv_sobj", "buildprog", fpv_sobj, title="Memory Footprint per Object File", description="Run fpv-gcc with --sobj all")
+env.AddCustomTarget("fpv_ssym", "buildprog", fpv_ssym, title="Memory Footprint per Symbol", description="Run fpv-gcc with --sobj all")
+env.AddCustomTarget("fpv_ssec", "buildprog", fpv_ssec, title="Memory Footprint per Object File, per Section", description="Run fpv-gcc with --ssec")
+env.AddCustomTarget("fpv_uf", "buildprog", fpv_uf, title="Used Files", description="Run fpv-gcc with --uf")
+env.AddCustomTarget("fpv_uregions", "buildprog", fpv_uregions, title="Used Regions", description="Run fpv-gcc with --uregions")
+env.AddCustomTarget("fpv_usections", "buildprog", fpv_usections, title="Used Sections", description="Run fpv-gcc with --usections")
