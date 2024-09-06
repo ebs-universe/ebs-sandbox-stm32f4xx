@@ -69,11 +69,12 @@ int main(void) {
   setup_core();
   setup_peripherals();
   start_blink_task();
-
   while (1)
   {
     tm_cron_poll();
+    #if APP_ENABLE_USB
     usb_task();
+    #endif
   }
 }
 

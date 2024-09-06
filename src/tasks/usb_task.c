@@ -6,6 +6,8 @@
 #include <hal/uc/usb.h>
 #include <hal/uc/usbcdc.h>
 
+#if APP_ENABLE_USB
+
 uint8_t message[] = "abcdefghijklmnopqrstuvwxyz"; 
 uint8_t connected = 0;
 uint8_t usb_read_buf[64];
@@ -30,9 +32,7 @@ static void cdc_write_task(void) {
     }
 }
 
-
 void usb_task(void){
-  #if APP_ENABLE_USB
     #if APP_ENABLE_USB_DEVICE
       tud_task();
       cdc_read_task();
@@ -41,5 +41,6 @@ void usb_task(void){
     #if APP_ENABLE_USB_HOST
       tuh_task();
     #endif
-  #endif
 }
+
+#endif

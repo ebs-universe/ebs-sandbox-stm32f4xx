@@ -14,6 +14,7 @@
 #define BLINK_PERIOD_NOT_MOUNTED    0, 100
 #define BLINK_PERIOD_SUSPENDED      1, 0
 
+#if APP_ENABLE_USB
 
 void tud_mount_cb(void) {
     #if BLINK_FOR_USB_STATUS
@@ -61,3 +62,5 @@ void application_usb_init(void) {
     set_blink_period(BLINK_PERIOD_NOT_MOUNTED);
     #endif
 }
+
+#endif
