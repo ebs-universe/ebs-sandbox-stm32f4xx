@@ -71,7 +71,9 @@ int main(void) {
   start_blink_task();
   while (1)
   {
+    #if APP_ENABLE_CRON
     tm_cron_poll();
+    #endif
     #if APP_ENABLE_USB
     usb_task();
     #endif
