@@ -7,12 +7,12 @@
 #include <hal/uc/usbcdc.h>
 
 #if BLINK_FOR_USB_STATUS
-#include <tasks/blink.h>
+#include <blink.h>
 #endif
 
-#define BLINK_PERIOD_MOUNTED        0, 500
-#define BLINK_PERIOD_NOT_MOUNTED    0, 100
-#define BLINK_PERIOD_SUSPENDED      1, 0
+#define BLINK_PERIOD_MOUNTED        500
+#define BLINK_PERIOD_NOT_MOUNTED    100
+#define BLINK_PERIOD_SUSPENDED      1000
 
 #if APP_ENABLE_USB
 
@@ -48,18 +48,27 @@ void application_usb_init(void) {
     usb_init();
     tud_init(BOARD_TUD_RHPORT);
 
-    #if uC_USBCDC_IF0
+    #if uC_USBCDC0_ENABLED
     usbcdc_init(0);
     #endif
-    #if uC_USBCDC_IF1
+    #if uC_USBCDC1_ENABLED
     usbcdc_init(1);
     #endif
-    #if uC_USBCDC_IF2
+    #if uC_USBCDC2_ENABLED
     usbcdc_init(2);
     #endif
 
     #if BLINK_FOR_USB_STATUS
     set_blink_period(BLINK_PERIOD_NOT_MOUNTED);
+    #endif
+}
+
+void tusb_task(void){
+    #if APP_ENABLE_USB_DEVICE
+      tud_task(); 
+    #endif
+    #if APP_ENABLE_USB_HOST
+      tuh_task();
     #endif
 }
 

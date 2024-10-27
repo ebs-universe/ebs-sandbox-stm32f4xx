@@ -1,7 +1,6 @@
 
 
-#include "irq_handlers.h"
-#include "stm32f4xx_hal.h"
+#include <hal/uc/core.h>
 
 
 void clock_set_default(void)
@@ -28,7 +27,7 @@ void clock_set_default(void)
   RCC_OscInitStruct.PLL.PLLQ = 7;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    Error_Handler();
+    die();
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
@@ -42,6 +41,6 @@ void clock_set_default(void)
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
-    Error_Handler();
+    die();
   }
 }

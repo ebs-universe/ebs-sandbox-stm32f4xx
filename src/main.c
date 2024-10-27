@@ -7,14 +7,15 @@
 #include "bsp/gpio.h"
 #include "bsp/usb.h"
 
-#include "tasks/blink.h"
-#include "tasks/usb_task.h"
+#include <blink.h>
 
 #include "ebs/time_if.h"
 #include <ucdm/ucdm.h>
 
 #include <hal/uc.h>
+#include <modbus/modbus.h>
 
+ucdm_addr_t next_address;
 
 static void setup_handlers(void) {
   __core_handler_inclusion = 1;
@@ -29,54 +30,86 @@ void button_handler(uint8_t line) {
   gpio_set_output_toggle(GPIO_LED1);
 }
 
-void led_toggle(void) {
-  gpio_set_output_toggle(GPIO_LED2);  
-}
-
-
-static void setup_core(void) {
+static ucdm_addr_t setup_core(ucdm_addr_t ucdm_address) {
   setup_handlers();
   core_init();
   ucdm_init();
-  time_init();
+  ucdm_address = tm_init(ucdm_address);
   clock_set_default();
+  return ucdm_address;
 }
 
 
-static void setup_peripherals(void) {
+static ucdm_addr_t setup_peripherals(ucdm_addr_t ucdm_address) {
   application_gpio_init();
   
-  #if APP_ENABLE_ID == 1 
+  #if APP_ENABLE_ID
     id_init();
   #endif
-  #if APP_ENABLE_ENTROPY == 1 
+  #if APP_ENABLE_ENTROPY
     entropy_init();
   #endif
-  #if APP_ENABLE_USB
-    application_usb_init();
+  #if APP_ENABLE_RTC
+    rtc_init();
   #endif
   #if APP_ENABLE_EEPROM
     eeprom_init();
+  #endif
+  #if APP_ENABLE_USB
+    application_usb_init();
   #endif
   
   gpio_conf_interrupt_handler(GPIO_K0, &button_handler);
   gpio_conf_interrupt_handler(GPIO_K1, &button_handler);
   gpio_arm_button_interrupts();
+
+  return ucdm_address;
 }
+
+static void setup_time_sync(void) {
+    #if APP_ENABLE_RTC
+        tm_sync_current_from_rtc();
+    #endif
+    tm_sync_request_host();
+}
+
+ucdm_addr_t setup_system(ucdm_addr_t ucdm_address) {
+    ucdm_address = setup_core(ucdm_address);
+    ucdm_address = setup_peripherals(ucdm_address);
+    return ucdm_address;
+}
+
+ucdm_addr_t setup_application(ucdm_addr_t ucdm_address) {
+    setup_time_sync();
+    #if APP_ENABLE_BLINK
+    start_blink_task();
+    #endif
+    #if APP_ENABLE_MODBUS
+    ucdm_address = modbus_init(ucdm_address, MODBUS_DEFAULT_DEVICE_ADDRESS);
+    #endif
+    return ucdm_address;
+}
+
+#ifndef PIO_UNIT_TESTING
 
 
 int main(void) {
-  setup_core();
-  setup_peripherals();
-  start_blink_task();
+  ucdm_addr_t ucdm_address = 1;
+  ucdm_address = setup_system(ucdm_address);
+  ucdm_address = setup_application(ucdm_address);
+
   while (1)
   {
-    #if APP_ENABLE_CRON
+    #if APP_ENABLE_TIME_CRON
     tm_cron_poll();
     #endif
     #if APP_ENABLE_USB
-    usb_task();
+    tusb_task();
+    #endif
+    #if APP_ENABLE_MODBUS
+    modbus_state_machine();
     #endif
   }
 }
 
+#endif

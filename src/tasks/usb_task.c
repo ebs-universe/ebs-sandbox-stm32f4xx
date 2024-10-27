@@ -34,14 +34,10 @@ static void cdc_write_task(void) {
     }
 }
 
-void usb_task(void){
+void usbcdc_bare_task(void){
     #if APP_ENABLE_USB_DEVICE
       cdc_read_task();
       cdc_write_task();
-      tud_task(); 
-    #endif
-    #if APP_ENABLE_USB_HOST
-      tuh_task();
     #endif
 }
 

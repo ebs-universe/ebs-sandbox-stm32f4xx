@@ -27,6 +27,9 @@
 // These are inlineable handlers defined by application code. We 
 // include them here for later inlining into the actual IRQ Handlers. 
 #include <time/systick_handler.h>
+
+// These IRQ handlers are defined by the HAL. These are included 
+// here to bring the inclusion variable into scope.
 #include <hal_platform/entropy_handlers.h>
 #include <hal_platform/usb_handlers.h>
 #include <hal_platform/shared_handlers.h>
@@ -81,8 +84,8 @@ void TIM3_IRQHandler(void);
  * @name Other Handlers
  * 
  * This is not an IRQ, but needed by the HAL. Since there isn't a better 
- * place to put it, we put here for now. These are implemented with the shared
- * handlers.
+ * place to put it, we put here for now. These are implemented with the 
+ * shared handlers.
  */
 /**@{*/    
 void Error_Handler(void);

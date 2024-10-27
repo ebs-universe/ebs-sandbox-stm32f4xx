@@ -48,6 +48,8 @@
 #define LED2_PIN            7   // GPIO_PIN_7
 #define LED2_PORT           GPIOA_BASE
 #define GPIO_LED2           LED2_PORT, LED2_PIN 
+
+#define BLINK_GPIO          GPIO_LED1
 /**@}*/ 
 
 /**
