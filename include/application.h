@@ -146,7 +146,7 @@
  * @name Application Modbus Configuration
  */
 /**@{*/   
-    #define APP_ENABLE_MODBUS                0
+    #define APP_ENABLE_MODBUS                1
     
     #if APP_ENABLE_PRIF
         #define MODBUS_TRANSPORT_INTFNUM     APP_PRIF_INTFNUM
